@@ -4,10 +4,17 @@ from contact.models import Elec_semlali_info
 from .models import Product ,Tags ,Category
 # Create your views here.
 def home_page (request):
-    products = Product.objects.all()
-    paginator = Paginator(products,12)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    if len(request.GET) != 0:
+        data = request.GET['product']
+        products = Product.objects.filter(PRD_Name__startswith=f'{data}')
+        paginator = Paginator(products,12)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+    else:
+        products = Product.objects.all()
+        paginator = Paginator(products,12)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
     Web_site  = Elec_semlali_info.objects.first()
     Catregorys = Category.objects.all()
     context ={
